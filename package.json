@@ -1,0 +1,19 @@
+{
+  "name": "maker-videos",
+  "version": "1.0.0",
+  "description": "Fazer Vídeos Automatizados",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucasGabryellll/maker-videos.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LucasGabryellll/maker-videos/issues"
+  },
+  "homepage": "https://github.com/LucasGabryellll/maker-videos#readme"
+}
