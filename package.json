@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/LucasGabryellll/maker-videos/issues"
   },
-  "homepage": "https://github.com/LucasGabryellll/maker-videos#readme"
+  "homepage": "https://github.com/LucasGabryellll/maker-videos#readme",
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
 }
