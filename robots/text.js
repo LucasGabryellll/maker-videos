@@ -11,9 +11,14 @@ async function robot(content) {
         const algorithmiaAuthenticated = algorithmia(algorithmiaApiKey);
         
         const wikipediaAlgorithm = algorithmiaAuthenticated.algo('web/WikipediaParser/0.1.2');
-        const WikipediaResponde = await wikipediaAlgorithm.pipe(content.searchTerm);//manda para o algoritmo do wikipedia e ele vai buscar no wikipedia oficial
-        const wikipediaContent = WikipediaResponde.get();//resposta cai aqui dentro(conteudo do wikipedia)
+        const WikipediaResponse = await wikipediaAlgorithm.pipe({
+            //manda para o algoritmo do wikipedia e ele vai buscar no wikipedia oficial
+            "lang" : content.lang,
+            "articleName": content.searchTerm
+        });
 
+        const wikipediaContent = WikipediaResponse.get();//resposta cai aqui dentro(conteudo do wikipedia)
+        
         content.sourceContentOriginal = wikipediaContent.content;
     };
 
@@ -54,6 +59,7 @@ async function robot(content) {
             });
         });
     }
+    console.log(JSON.stringify(content, null, 4));
 };
 
 module.exports = robot;
