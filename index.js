@@ -8,6 +8,7 @@ async function start() {
     
     content.searchTerm = askAndReturnSearchTerm();//Função para pegar o input do user(Termo para pesquisa)
     content.prefix = askAndReturnPrefix();//(procurar por prefixo)
+    content.lang = askAndReturnLanguage()
     
     await robots.text(content);
 
@@ -24,7 +25,16 @@ async function start() {
         return selectedPrefixText;
     };
 
+    function askAndReturnLanguage(){
+        //Traduz a pesquisa
+        const language = ['pt','en']
+        const selectedLangIndex = readLine.keyInSelect(language,'Escolha o indioma: ')
+        const selectedLangText = language[selectedLangIndex]
+        return selectedLangText
+    }
+
     console.log(content);
+    //console.log(JSON.stringify(content, null, 4));
 
 };
 
