@@ -13,12 +13,19 @@ const nlu = new NaturalLanguageUnderstandingV1({
     url: 'https://api.eu-gb.natural-language-understanding.watson.cloud.ibm.com/instances/af06c7f7-0129-4585-ad0c-4a6ef2dc6b57'//tem que ser a mesma das credenciais
 });
 
-async function robot(content) {
+const state = require('./state.js');
+
+
+async function robot() {
+    const content = state.load();//carregar o state do robo de input
+
     await fetchContentFromWikipedia(content);//Baixar conteúdo do Wikipedia
     sanitizeContent(content);//Limpar o conteúdo
     breakContentIntoSentences(content);//Separar em sentenças
     limitMaximumSentences(content);//Limite max de sentenças para o Watson
     await fetchKeywordsOfAllSentences(content);//Buscar palavra chave da sentença 
+
+    state.save(content);//salva mais info 
 
     async function fetchContentFromWikipedia(content) {
         const algorithmiaAuthenticated = algorithmia(algorithmiaApiKey);
