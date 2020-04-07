@@ -4,7 +4,9 @@ const robots = {
 };
 
 async function start() {
-    const content = {};
+    const content = {
+        maximumSentences: 7, 
+    };
     
     content.searchTerm = askAndReturnSearchTerm();//Função para pegar o input do user(Termo para pesquisa)
     content.prefix = askAndReturnPrefix();//(procurar por prefixo)
@@ -33,8 +35,7 @@ async function start() {
         return selectedLangText
     }
 
-    console.log(content);
-    //console.log(JSON.stringify(content, null, 4));
+    console.log(JSON.stringify(content, null, 4));
 
 };
 

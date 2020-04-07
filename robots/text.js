@@ -1,24 +1,36 @@
 const algorithmia = require('algorithmia');
-const algorithmiaApiKey = require('../credentials/algorithmia.json').apiKey;
 const sentenceBoundaryDetection = require('sbd');
+
+const algorithmiaApiKey = require('../credentials/algorithmia.json').apiKey;
+const watsonApiKey = require('../credentials/watson-nlu.json').apikey;
+
+const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1.js');
+const { IamAuthenticator } = require('ibm-watson/auth');
+
+const nlu = new NaturalLanguageUnderstandingV1({
+    authenticator: new IamAuthenticator({ apikey: watsonApiKey }),
+    version: '2018-04-05',
+    url: 'https://api.eu-gb.natural-language-understanding.watson.cloud.ibm.com/instances/af06c7f7-0129-4585-ad0c-4a6ef2dc6b57'//tem que ser a mesma das credenciais
+});
 
 async function robot(content) {
     await fetchContentFromWikipedia(content);//Baixar conteúdo do Wikipedia
     sanitizeContent(content);//Limpar o conteúdo
     breakContentIntoSentences(content);//Separar em sentenças
+    limitMaximumSentences(content);//Limite max de sentenças para o Watson
+    await fetchKeywordsOfAllSentences(content);//Buscar palavra chave da sentença 
 
     async function fetchContentFromWikipedia(content) {
         const algorithmiaAuthenticated = algorithmia(algorithmiaApiKey);
-        
+
         const wikipediaAlgorithm = algorithmiaAuthenticated.algo('web/WikipediaParser/0.1.2');
-        const WikipediaResponse = await wikipediaAlgorithm.pipe({
+        const wikipediaResponse = await wikipediaAlgorithm.pipe({
             //manda para o algoritmo do wikipedia e ele vai buscar no wikipedia oficial
-            "lang" : content.lang,
+            "lang": content.lang,
             "articleName": content.searchTerm
         });
+        const wikipediaContent = wikipediaResponse.get();//resposta cai aqui dentro(conteudo do wikipedia)
 
-        const wikipediaContent = WikipediaResponse.get();//resposta cai aqui dentro(conteudo do wikipedia)
-        
         content.sourceContentOriginal = wikipediaContent.content;
     };
 
@@ -32,7 +44,7 @@ async function robot(content) {
             const allLines = text.split('\n');
 
             const withoutBlankLinesAndMarkdown = allLines.filter((line) => {
-                if(line.trim().length === 0 || line.trim().startsWith('=')) {
+                if (line.trim().length === 0 || line.trim().startsWith('=')) {
                     return false;
                 }
 
@@ -41,16 +53,16 @@ async function robot(content) {
 
             return withoutBlankLinesAndMarkdown.join(' ');
         };
-        
+
         function removeDatesInParentheses(text) {
-            return text.replace(/\((?:\([^()]*\)|[^()])*\)/gm, '').replace(/  /g,' ')
+            return text.replace(/\((?:\([^()]*\)|[^()])*\)/gm, '').replace(/  /g, ' ')
         }
     };
+    
     function breakContentIntoSentences(content) {
         content.sentences = [];
 
         const sentences = sentenceBoundaryDetection.sentences(content.sourceContentSanitized)
-        
         sentences.forEach((sentence) => {
             content.sentences.push({
                 text: sentence,
@@ -59,7 +71,38 @@ async function robot(content) {
             });
         });
     }
-    console.log(JSON.stringify(content, null, 4));
-};
+    
+    async function limitMaximumSentences(content) {
+        content.sentences = content.sentences.slice(0, content.maximumSentences);
+        
+    }
+
+    async function fetchKeywordsOfAllSentences(content) {
+        for (const sentence of content.sentences) {
+            sentence.keywords = await fetchWatsonAndReturnKeywords(sentence.text);
+        }
+    }
+
+    async function fetchWatsonAndReturnKeywords(sentence) {
+        return new Promise((resolve, reject) => {
+            nlu.analyze({
+                text: sentence,
+                features: {
+                    keywords: {}
+                }
+            }, (error, response) => {
+                if(error) {
+                    throw error;
+                }
+
+                const keywords = response.result.keywords.map((keyword) => {
+                    return keyword.text;
+                });
+                
+                resolve(keywords);
+            });
+        });
+    }
+}
 
 module.exports = robot;
