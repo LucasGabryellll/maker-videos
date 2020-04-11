@@ -36,7 +36,7 @@ async function robot() {
             "lang": content.lang,
             "articleName": content.searchTerm
         });
-        const wikipediaContent = wikipediaResponse.get();//resposta cai aqui dentro(conteudo do wikipedia)
+        const wikipediaContent = wikipediaResponse.get();//resposta cai aqui dentro(conteudo do wikipedia).
 
         content.sourceContentOriginal = wikipediaContent.content;
     };
