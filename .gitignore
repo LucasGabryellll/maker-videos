@@ -110,3 +110,9 @@ content.json
 
 content/*.png
 content/*.jpg
+
+CIDFont/
+CMap/
+Font/
+content/*after-effects-script.js
+content/output.mov

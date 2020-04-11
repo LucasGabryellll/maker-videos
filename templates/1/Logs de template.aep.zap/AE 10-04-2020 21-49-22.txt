@@ -1,0 +1,8 @@
+  10/04/2020 21:49:22: iniciando composição “main”.
+
+  Saída para: C:\Users\gabry\Documents\maker-videos\content\main.mp3    10/04/2020 21:49:27: composição concluída “main”.
+
+
+  Tempo total decorrido: 5 segundos
+Log fechado em 10/04/2020 às 21:49:27
+
