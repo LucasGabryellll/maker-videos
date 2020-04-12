@@ -1,7 +1,7 @@
 const algorithmia = require('algorithmia');
+const algorithmiaApiKey = require('../credentials/algorithmia.json').apiKey;
 const sentenceBoundaryDetection = require('sbd');
 
-const algorithmiaApiKey = require('../credentials/algorithmia.json').apiKey;
 const watsonApiKey = require('../credentials/watson-nlu.json').apikey;
 
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1.js');

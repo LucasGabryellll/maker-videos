@@ -142,7 +142,7 @@ async function robot(){
 
     async function renderVideoWithAfterEffects() {
         return new Promise((resolve, reject) => {
-            const aerenderFilePath = '/Program Files/Adobe/Adobe After Effects 2020/Support Files/aerender';
+            const aerenderFilePath = '/Program Files/Adobe/Adobe After Effects 2020/Support Files/aerender.exe';
             const templateFilePath = `${rootPath}/templates/1/template.aep.zap`;
             const destinationFilePath = `${rootPath}/content/output.mov`;
 
@@ -161,6 +161,7 @@ async function robot(){
             aerender.on('close', () => {
                 console.log('> [video-robot] After Effects fechado');
                 resolve();
+                
             });
         });
     };
