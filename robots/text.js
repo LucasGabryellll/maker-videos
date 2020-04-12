@@ -17,6 +17,7 @@ const state = require('./state.js');
 
 
 async function robot() {
+    console.log('> [text-robot] Iniciando...')
     const content = state.load();//carregar o state do robo de input
 
     await fetchContentFromWikipedia(content);//Baixar conteúdo do Wikipedia
@@ -28,6 +29,7 @@ async function robot() {
     state.save(content);//salva mais info 
 
     async function fetchContentFromWikipedia(content) {
+        console.log('> [text-robot] Buscando conteudo na Wikipedia')
         const algorithmiaAuthenticated = algorithmia(algorithmiaApiKey);
 
         const wikipediaAlgorithm = algorithmiaAuthenticated.algo('web/WikipediaParser/0.1.2');
@@ -39,6 +41,7 @@ async function robot() {
         const wikipediaContent = wikipediaResponse.get();//resposta cai aqui dentro(conteudo do wikipedia)
 
         content.sourceContentOriginal = wikipediaContent.content;
+        console.log('> [text-robot] Concluindo Busca!')
     };
 
     function sanitizeContent(content) {
@@ -85,8 +88,14 @@ async function robot() {
     }
 
     async function fetchKeywordsOfAllSentences(content) {
+        console.log('> [text-robot] Começando a buscar palavras-chave do Watson')
+
         for (const sentence of content.sentences) {
+            console.log(`> [text-robot] Sentence: "${sentence.text}"`)
+
             sentence.keywords = await fetchWatsonAndReturnKeywords(sentence.text);
+
+            console.log(`> [text-robot] Keywords: ${sentence.keywords.join(', ')}\n`)
         }
     }
 

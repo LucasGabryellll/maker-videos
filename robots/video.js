@@ -5,6 +5,7 @@ const path = require('path');
 const rootPath = path.dirname(__dirname, '..');
 
 async function robot(){
+    console.log('> [video-robot] Iniciando...')
     const content = state.load();
 
     await convertAllImages(content);
@@ -54,7 +55,7 @@ async function robot(){
                         return reject(error);
                     };
 
-                    console.log(`> [video-robot] Image converted: ${outputFile}`);
+                    console.log(`> [video-robot] Imagem convertidada: ${outputFile}`);
                     resolve();
                 });
 
@@ -114,7 +115,7 @@ async function robot(){
                         return reject(error);
                     }
 
-                    console.log(`> [video-robot] Sentence created: ${outputFile}`);
+                    console.log(`> [video-robot] Sentença criada: ${outputFile}`);
                     resolve();
                 });
         });
@@ -129,7 +130,7 @@ async function robot(){
                         return reject(error);
                     }
 
-                    console.log('> Creating YouTube Thumbnail');
+                    console.log('> [video-robot] Criando Thumbnail do YouTube');
                     resolve();
                 });
         });
@@ -145,7 +146,7 @@ async function robot(){
             const templateFilePath = `${rootPath}/templates/1/template.aep.zap`;
             const destinationFilePath = `${rootPath}/content/output.mov`;
 
-            console.log('Starting After Effects');
+            console.log('> [video-robot] Iniciando After Effects');
 
             const aerender = spawn(aerenderFilePath, [
                 '-comp', 'main', 
@@ -158,7 +159,7 @@ async function robot(){
             }); 
 
             aerender.on('close', () => {
-                console.log('After Effects closed');
+                console.log('> [video-robot] After Effects fechado');
                 resolve();
             });
         });
