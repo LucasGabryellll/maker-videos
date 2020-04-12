@@ -111,7 +111,7 @@ async function robot() {
     };
 
     async function uploadVideo(content) {
-        const videoFilePath = './content/output.mov';
+        const videoFilePath = './content/output.mov'
         const videoFileSize = fs.statSync(videoFilePath).size;
         const videoTitle = `${content.prefix} ${content.searchTerm}`;
         const videoTags = [content.searchTerm, ...content.sentences[0].keywords];

@@ -17,7 +17,7 @@ function robot() {
     
     function askAndReturnPrefix() {
         //retorna o valor do Text e colocar no content.prefix
-        const prefixes = ['Quem e', 'O que e', 'A historia de'];
+        const prefixes = ['Quem e', 'O que e', 'A historia de(a)'];
         const selectedPrefixIndex = readLine.keyInSelect(prefixes);//pega o index do array
         const selectedPrefixText = prefixes[selectedPrefixIndex];//Ler o que tem no index selecionado do array
 
